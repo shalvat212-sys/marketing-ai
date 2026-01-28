@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Architect AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/bpg-nateli-mtavruli');
+
+        :root {
+            --myauto-orange: #fd5417;
+            --myauto-bg: #f2f3f6;
+            --myauto-text: #2c3e50;
+            --border-gray: #e4e7eb;
+            --soft-blue: #3b82f6;
+            --soft-green: #10b981;
+        }
+
+        body {
+            background-color: var(--myauto-bg);
+            color: var(--myauto-text);
+            font-family: 'BPG Nateli Mtavruli', sans-serif;
+            padding-bottom: 80px;
+        }
+
+        .main-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-top: 40px;
+            border: 1px solid var(--border-gray);
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--myauto-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section-label {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 35px 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--myauto-orange);
+            color: var(--myauto-text);
+            display: inline-block;
+        }
+
+        .form-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--myauto-text);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* განმარტებების სტილი (Hint) */
+        .hint-text {
+            color: #8b97a5;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid var(--border-gray);
+            padding: 12px;
+            background-color: #fdfdfd;
+        }
+
+        .form-control:focus {
+            border-color: var(--myauto-orange);
+            box-shadow: 0 0 0 3px rgba(253, 84, 23, 0.1);
+            background-color: #fff;
+        }
+
+        .btn-myauto {
+            background-color: var(--myauto-orange);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 40px;
+            transition: 0.3s;
+        }
+
+        .btn-myauto:hover {
+            background-color: #e44a13;
+            box-shadow: 0 5px 15px rgba(253, 84, 23, 0.3);
+        }
+
+        /* შედეგის სექცია */
+        .result-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-gray);
+        }
+
+        .result-content h2, .result-content h3 {
+            color: var(--myauto-orange);
+            border-left: 4px solid var(--soft-blue);
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            z-index: 2000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader" class="loading-overlay">
+    <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem; color: var(--myauto-orange) !important;"></div>
+    <h5 class="mt-3 fw-bold">AI ამზადებს სტრატეგიას...</h5>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+
+            <div class="main-container">
+                <div class="text-center mb-5">
+                    <div class="brand-logo">
+                        <i class="fas fa-rocket"></i>
+                        MARKET ARCHITECT
+                    </div>
+                    <p class="text-muted small">პროფესიონალური მარკეტინგული გეგმა 1 წუთში</p>
+                </div>
+
+                <form method="POST" id="mainForm">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-tag text-primary"></i> ბიზნესის დასახელება</label>
+                        <span class="hint-text">შეიყვანეთ კომპანიის ან პროექტის სახელი (მაგ: "Eco Car Wash")</span>
+                        <input type="text" name="business_name" value="{{ business_name|default:'' }}" class="form-control" required>
+                    </div>
+
+                    <div class="section-label">📊 SWOT დიაგნოსტიკა</div>
+                    <p class="small text-muted mb-4">SWOT გვეხმარება გავიგოთ ბიზნესის შიდა ძალა და გარე შანსები.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-success"><i class="fas fa-plus-circle"></i> ძლიერი მხარეები</label>
+                            <span class="hint-text">რაში ხართ სხვებზე უკეთესი? (დაბალი ფასი, ხარისხი)</span>
+                            <textarea name="strengths" class="form-control" rows="3">{{ strengths|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-danger"><i class="fas fa-minus-circle"></i> სუსტი მხარეები</label>
+                            <span class="hint-text">რა გიშლით ხელს განვითარებაში? (გამოუცდელობა)</span>
+                            <textarea name="weaknesses" class="form-control" rows="3">{{ weaknesses|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-primary"><i class="fas fa-chart-line"></i> შესაძლებლობები</label>
+                            <span class="hint-text">ბაზრის რა შანსები გაქვთ? (ახალი ტექნოლოგია)</span>
+                            <textarea name="opportunities" class="form-control" rows="3">{{ opportunities|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-warning"><i class="fas fa-biohazard"></i> საფრთხეები</label>
+                            <span class="hint-text">რა გარე საფრთხეები არსებობს? (კონკურენცია)</span>
+                            <textarea name="threats" class="form-control" rows="3">{{ threats|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="section-label">🌍 გარემო და აუდიტორია</div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-globe text-info"></i> PESTEL ანალიზი</label>
+                            <span class="hint-text">პოლიტიკური, ეკონომიკური და სოციალური ფაქტორები</span>
+                            <textarea name="pestel_data" class="form-control" rows="3">{{ pestel_data|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-users text-info"></i> სამიზნე აუდიტორია</label>
+                            <span class="hint-text">ვინ არის თქვენი კლიენტი? (ასაკი, ინტერესები)</span>
+                            <textarea name="target_audience" class="form-control" rows="3">{{ target_audience|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="section-label">🎯 მარკეტინგული მიქსი</div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-box"></i> 4P მიდგომა</label>
+                            <span class="hint-text">პროდუქტი, ფასი, ადგილი და პრომოუცია</span>
+                            <textarea name="marketing_mix_4p" class="form-control" rows="2">{{ marketing_mix_4p|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-handshake"></i> 4C მიდგომა</label>
+                            <span class="hint-text">კლიენტის ხარჯი, კომფორტი და კომუნიკაცია</span>
+                            <textarea name="marketing_mix_4c" class="form-control" rows="2">{{ marketing_mix_4c|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-myauto shadow-sm">
+                        <i class="fas fa-wand-magic-sparkles me-2"></i> სტრატეგიის გენერირება
+                    </button>
+                </form>
+            </div>
+
+            {% if plan %}
+            <div class="result-box" id="result-section">
+                <div class="text-center mb-5">
+                    <i class="fas fa-check-double text-success fa-3x mb-3"></i>
+                    <h2 class="fw-bold">თქვენი სტრატეგია მზად არის</h2>
+                    <p class="text-muted">{{ plan.business_name }}</p>
+                </div>
+                <div class="result-content">
+                    {{ plan.generated_strategy|safe }}
+                </div>
+                <div class="mt-5 text-center">
+                    <button onclick="window.print()" class="btn btn-light border btn-sm px-4">PDF / ბეჭდვა</button>
+                    <a href="/" class="btn btn-link text-muted btn-sm ms-3">თავიდან დაწყება</a>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('mainForm').onsubmit = function() {
+        document.getElementById('loader').style.display = 'flex';
+    };
+    {% if plan %}
+    window.onload = function() {
+        document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+    };
+    {% endif %}
+</script>
+
+</body>
+</html>
