@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zj@e+k3c@sdd#!9=*d6nkd#*u15y2xy5$v%@e$b60!p7cw2u*p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']  # დროებით, რომ ყველგან გაეშვას
 
@@ -119,4 +119,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
