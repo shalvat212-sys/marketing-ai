@@ -1,4 +1,5 @@
 django
-google-generativeai
+google-genai1
 gunicorn
 markdown
+
